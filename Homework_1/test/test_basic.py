@@ -40,9 +40,10 @@ class TestGoTo(BaseCase):
 
 @pytest.mark.ui
 class TestProfile(BaseCase):
-    @pytest.mark.skip(reason='no need')
+   # @pytest.mark.skip(reason='no need')
     def test_change(self, auto_auth):
         self.driver = auto_auth
-        self.auth_page.click(locators.ProfileLocators.PROF_LOCATOR, 20)
-
-        pass
+        self.prof_page.change()
+        self.prof_page.check()
+        self.prof_page.clear()      # Почему-то не удаляет данные, хотя прожимает кнопку и подтверждает сохранение
+                                    # (смотрел через таймер)

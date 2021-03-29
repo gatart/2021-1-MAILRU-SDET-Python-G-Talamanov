@@ -13,8 +13,10 @@ class AuthPageLocators:
 class ProfileLocators:
     PROF_LOCATOR = (By.XPATH, '//a[@href="/profile"]')
     FIO_LOCATOR = (By.XPATH, '//div[@data-name="fio"]/div/input')
-    NUM_LOCATOR = ()
-
+    NUM_LOCATOR = (By.XPATH, '//div[@data-name="phone"]/div/input')
+    EMAIL_LOCATOR = (By.XPATH, '//div[@class="js-additional-email profile__list__row__input"]/div/div/input')
+    SAFE_BUTTON = (By.XPATH, '//div[@class="js-footer"]/button')
+    BACK_LINK = (By.XPATH, '//a[@href="//target.my.com"]')
 
 class SegmentLocators:
     SEGMENT_LOCATOR = (By.XPATH, '//a[@class="center-module-button-cQDNvq center-module-segments-3y1hDo"]')

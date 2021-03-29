@@ -3,11 +3,17 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
 from ui.pages.auth_page import AuthPage
+from ui.pages.profile_page import ProfPage
 
 
 @pytest.fixture
 def auth_page(driver):
     return AuthPage(driver=driver)
+
+
+@pytest.fixture
+def prof_page(driver):
+    return ProfPage(driver=driver)
 
 
 @pytest.fixture(scope='function')
