@@ -1,5 +1,6 @@
 from ui.locators import locators
 from ui.pages.auth_page import AuthPage
+from selenium.webdriver.common.keys import Keys
 import time
 
 class ProfPage(AuthPage):
@@ -22,10 +23,14 @@ class ProfPage(AuthPage):
         assert "hahaha@mail.ru" == input_el.get_attribute('value')
 
     def clear(self):
-        self.input("", locators.ProfileLocators.FIO_LOCATOR)
-        self.input("", locators.ProfileLocators.NUM_LOCATOR)
-        self.input("", locators.ProfileLocators.EMAIL_LOCATOR)
+        field = self.find(locators.ProfileLocators.FIO_LOCATOR)
+        field.send_keys(Keys.BACK_SPACE * 15)
+        field = self.find(locators.ProfileLocators.NUM_LOCATOR)
+        field.send_keys(Keys.BACK_SPACE * 15)
+        field = self.find(locators.ProfileLocators.EMAIL_LOCATOR)
+        field.send_keys(Keys.BACK_SPACE * 15)
         element = self.find(locators.ProfileLocators.SAFE_BUTTON)
         element.click()
         time.sleep(10)
         self.click(locators.ProfileLocators.BACK_LINK)
+        time.sleep(10)
