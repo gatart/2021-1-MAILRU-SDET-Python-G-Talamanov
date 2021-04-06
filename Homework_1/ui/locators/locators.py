@@ -2,23 +2,24 @@ from selenium.webdriver.common.by import By
 
 
 class AuthPageLocators:
-    BUTTON_LOCATOR = (By.CLASS_NAME, 'responseHead-module-button-1BMAy4')
-    LOGIN_LOCATOR = (By.XPATH, '/html/body/div[2]/div/div[2]/div/form/div/div[1]/input')
-    PASSWORD_LOCATOR = (By.XPATH, '/html/body/div[2]/div/div[2]/div/form/div/div[2]/input')
-    AUTH_LOCATOR = (By.XPATH, '/html/body/div[1]/div/div[1]/div/div/div/div[3]/div/div[1]')
-    LOGOUT_MENU = (By.XPATH, '/html/body/div[1]/div/div[1]/div/div/div/div[3]')
-    LOGOUT_BUTTON = (By.XPATH, '/html/body/div[1]/div/div[1]/div/div/div/div[3]/ul/li[2]')
+    BUTTON_LOCATOR = (By.XPATH, '//div[contains(@class, "responseHead-module-button")]')
+    LOGIN_LOCATOR = (By.XPATH, '//input[@name="email"]')
+    PASSWORD_LOCATOR = (By.XPATH, '//input[@name="password"]')
+    AUTH_LOCATOR = (By.XPATH, '//div[contains(@class, "right-module-userNameWrap")]')
+    LOGOUT_MENU = (By.XPATH, '//div[contains(@class, "right-module-rightButton")]')
+    LOGOUT_BUTTON = (By.XPATH, '//a[@href="/logout"]')
 
 
 class ProfileLocators:
     PROF_LOCATOR = (By.XPATH, '//a[@href="/profile"]')
     FIO_LOCATOR = (By.XPATH, '//div[@data-name="fio"]/div/input')
     NUM_LOCATOR = (By.XPATH, '//div[@data-name="phone"]/div/input')
-    EMAIL_LOCATOR = (By.XPATH, '//div[@class="js-additional-email profile__list__row__input"]/div/div/input')
+    EMAIL_BUTTON = (By.XPATH, '//div[contains(@class, "clickable-button__spinner")]')
+    EMAIL_LOCATOR = (By.XPATH, '//div[contains(@class, "js-additional-email")]/div/div/input')
     SAFE_BUTTON = (By.XPATH, '//div[@class="js-footer"]/button')
     BACK_LINK = (By.XPATH, '//a[@href="//target.my.com"]')
 
 class SegmentLocators:
-    SEGMENT_LOCATOR = (By.XPATH, '//a[@class="center-module-button-cQDNvq center-module-segments-3y1hDo"]')
+    SEGMENT_LOCATOR = (By.XPATH, '//a[contains(@class, "center-module-segments")]')
     SEGMENT_CHECK_1 = (By.XPATH, '//a[@href="/segments/segments_list/new/"]')
 

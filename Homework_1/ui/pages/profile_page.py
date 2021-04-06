@@ -8,6 +8,8 @@ class ProfPage(AuthPage):
         self.click(locators.ProfileLocators.PROF_LOCATOR, 20)
         self.input("George", locators.ProfileLocators.FIO_LOCATOR)
         self.input("+77777777777", locators.ProfileLocators.NUM_LOCATOR)
+        element = self.find(locators.ProfileLocators.EMAIL_BUTTON)
+        element.click()
         self.input("hahaha@mail.ru", locators.ProfileLocators.EMAIL_LOCATOR)
         element = self.find(locators.ProfileLocators.SAFE_BUTTON)
         element.click()

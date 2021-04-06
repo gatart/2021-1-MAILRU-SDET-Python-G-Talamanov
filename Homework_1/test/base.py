@@ -5,7 +5,7 @@ from ui.pages.auth_page import AuthPage
 from ui.pages.profile_page import ProfPage
 
 
-@pytest.mark.ui
+@pytest.mark.UI
 class BaseCase:
     @pytest.fixture(scope='function', autouse=True)
     def setup(self, driver, request: FixtureRequest):
