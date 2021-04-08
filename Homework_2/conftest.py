@@ -5,6 +5,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 from ui.pages.auth_page import AuthPage
 from ui.pages.company_page import CompanyPage
 from ui.pages.segment_page import SegmentPage
+from fixtures import *
+
+
+@pytest.fixture(scope='session')    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+def config(request):
+    url = 'https://target.my.com/'
+    return {'url': url}
 
 
 @pytest.fixture

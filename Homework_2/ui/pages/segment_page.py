@@ -11,7 +11,7 @@ class SegmentPage(AuthPage):
         try:
             self.click(locators.SegmentLocators.CREATE_LOCATOR_1, timeout=7)
         except TimeoutException:
-            self.click(locators.SegmentLocators.CREATE_LOCATOR_2)
+            self.click(locators.SegmentLocators.CREATE_LOCATOR_2, timeout=7)
             self.click(locators.SegmentLocators.TYPE_LOCATOR)
 
         self.click(locators.SegmentLocators.CHECKBOX_LOCATOR)
