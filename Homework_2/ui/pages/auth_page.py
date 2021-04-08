@@ -17,8 +17,7 @@ class AuthPage(object):
 
     def click(self, locator, timeout=None):
         self.find(locator, timeout)
-        WebDriverWait(self.driver, timeout=10, ignored_exceptions=StaleElementReferenceException)\
-            .until(EC.element_to_be_clickable(locator)).click()
+        self.wait(timeout).until(EC.element_to_be_clickable(locator)).click()
 
     def input(self, put, locator):
         field = self.find(locator)
@@ -38,7 +37,7 @@ class AuthPage(object):
         if timeout is None:
             timeout = 5
 
-        return WebDriverWait(self.driver, timeout)
+        return WebDriverWait(self.driver, timeout, ignored_exceptions=StaleElementReferenceException)
 
     def auth_locat(self, login, password, Log_loc, Pas_log):
         self.input(login, Log_loc)

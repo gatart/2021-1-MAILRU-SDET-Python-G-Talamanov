@@ -8,7 +8,7 @@ from ui.locators import locators
 class CompanyPage(AuthPage):
     def create(self, name):
         self.click(locators.CompanyLocators.COMPANY_BUTTON, timeout=7)
-        self.click(locators.CompanyLocators.TYPE_LOCATOR, timeout=7)
+        self.click(locators.CompanyLocators.TYPE_LOCATOR, timeout=10)
         self.input("test.com", locators.CompanyLocators.LINK_LOCATOR)
         self.click(locators.CompanyLocators.FORMAT_LOCATOR)
         el = self.find(locators.CompanyLocators.UPLOAD)
