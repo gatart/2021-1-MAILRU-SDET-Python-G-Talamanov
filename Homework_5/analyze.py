@@ -35,35 +35,30 @@ def t(requests):
 
 def f(requests):
     requests.sort(key=lambda x: x['url'])
-    group = []
     ans = []
     flag = True
     tmp = {}
     for elm in requests:
         if flag:
             tmp['url'] = elm['url']
+            tmp['count'] = 0
             flag = False
         if elm['url'] != tmp['url']:
-            group.sort(key=lambda x: x['len'], reverse=True)
-            ans.append(group[0])
-            ans[-1]['count'] = len(group)
-            group.clear()
-            group.append(elm)
+            ans.append(tmp)
+            tmp = {}
             tmp['url'] = elm['url']
+            tmp['count'] = 1
         else:
-            group.append(elm)
+            tmp['count'] += 1
 
-    group.sort(key=lambda x: x['len'], reverse=True)
-    ans.append(group[0])
-    ans[-1]['count'] = len(group)
-    ans.sort(key=lambda x: x['len'], reverse=True)
+    ans.append(tmp)
+    ans.sort(key=lambda x: x['count'], reverse=True)
     ans = ans[:10]
 
     ret = []
     for request in ans:
         dict_ = {}
         dict_['url'] = request['url']
-        dict_['code'] = request['code']
         dict_['count'] = request['count']
         ret.append(dict_)
 
