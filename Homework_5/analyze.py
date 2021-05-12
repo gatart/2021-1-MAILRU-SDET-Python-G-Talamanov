@@ -10,7 +10,7 @@ def a(lines):
 
 
 def t(requests):
-    methods = ['OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT']
+    methods = ['OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT', 'PATCH']
     stats = {}
     for dict_ in requests:
         method = dict_['method']
@@ -31,7 +31,6 @@ def t(requests):
 
     return ret
 
-#---------------------------------------------------------------------------------------------------------------------------
 
 def f(requests):
     requests.sort(key=lambda x: x['url'])
@@ -64,7 +63,6 @@ def f(requests):
 
     return ret
 
-#--------------------------------------------------------------------------------------------------------------------------------
 
 def c(requests):
     requests = list(filter(lambda x: x['code'] in range(400, 500), requests))
@@ -153,11 +151,6 @@ def main():
 
     with open(args.file) as fl:
         lines = fl.read().split('\n')
-
-    method = '^(OPTIONS|GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT)$'
-    for line in lines:
-        if not re.search(method, line):
-            del line
 
     if lines[-1] == '':
         del lines[-1]

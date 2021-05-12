@@ -23,7 +23,7 @@ err(){
     exit 1
 }
 
-methods='^(OPTIONS|GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT)$'
+methods='^(OPTIONS|GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT|PATCH)$'
 
 if [ ! $# -eq 2 ]; then
     help
@@ -50,19 +50,19 @@ exec 1>$outfile
 
 case "$1" in
     a)
-      egrep -w 'OPTIONS|GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT' "$file" | wc -l
+      wc -l "$file" | awk '{print $1}'
       ;;
     t)
-      egrep -w 'OPTIONS|GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT' "$file" | awk -F '[ "]' '{print $7}' | sort | grep -E $methods | uniq -c | sort -rg | awk '{print $2,$1}'
+      awk -F '[ "]' '{print $7}' "$file" | sort | grep -E $methods | uniq -c | sort -rg | awk '{print $2,$1}'
       ;;
     f)
-      egrep -w 'OPTIONS|GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT' "$file" | awk -F '[ "]' '{print $8}' | sort | uniq -c | sort -k 1,1rn | head -10 | awk '{print $2,$1}'
+      awk -F '[ "]' '{print $8}' "$file" | sort | uniq -c | sort -k 1,1rn | head -10 | awk '{print $2,$1}'
       ;;
     c)
-      egrep -w 'OPTIONS|GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT' "$file" | awk -F '[ "]' '$11>=400 && $11<500 {print $1,$11,$12,$8}' | sort -k 3,3rn | head -5 | awk '{print $4,$2,$3, $1}'
+      awk -F '[ "]' '$11>=400 && $11<500 {print $1,$11,$12,$8}' "$file" | sort -k 3,3rn | head -5 | awk '{print $4,$2,$3, $1}'
       ;;
     s)
-      egrep -w 'OPTIONS|GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT' "$file" | awk -F '[ "]' '$11>=500 && $11<600 {print $1}' | sort -rn | uniq -c | sort -rnk 1,1 | head -5 | awk '{print $2, $1}'
+      awk -F '[ "]' '$11>=500 && $11<600 {print $1}' "$file" | sort -rn | uniq -c | sort -rnk 1,1 | head -5 | awk '{print $2, $1}'
       ;;
     *)
       rm $outfile
