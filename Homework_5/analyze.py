@@ -10,12 +10,9 @@ def a(lines):
 
 
 def t(requests):
-    methods = ['OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT', 'PATCH']
     stats = {}
     for dict_ in requests:
         method = dict_['method']
-        if method not in methods:
-            continue
 
         if method not in stats.keys():
             stats[method] = 0

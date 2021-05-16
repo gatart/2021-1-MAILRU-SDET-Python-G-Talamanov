@@ -23,7 +23,6 @@ err(){
     exit 1
 }
 
-methods='^(OPTIONS|GET|HEAD|POST|PUT|DELETE|TRACE|CONNECT|PATCH)$'
 
 if [ ! $# -eq 2 ]; then
     help
@@ -53,7 +52,7 @@ case "$1" in
       wc -l "$file" | awk '{print $1}'
       ;;
     t)
-      awk -F '[ "]' '{print $7}' "$file" | sort | grep -E $methods | uniq -c | sort -rg | awk '{print $2,$1}'
+      awk -F '[ "]' '{print $7}' "$file" | sort | uniq -c | sort -rg | awk '{print $2,$1}'
       ;;
     f)
       awk -F '[ "]' '{print $8}' "$file" | sort | uniq -c | sort -k 1,1rn | head -10 | awk '{print $2,$1}'
