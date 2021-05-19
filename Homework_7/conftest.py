@@ -53,7 +53,7 @@ def start_mock():
     st = time.time()
     while time.time() - st <= 5:
         try:
-            requests.get(f'http://{settings.MOCK_HOST}:{settings.MOCK_PORT}')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            requests.get(f'http://{settings.MOCK_HOST}:{settings.MOCK_PORT}')
             started = True
             break
         except ConnectionError:
@@ -87,3 +87,4 @@ def pytest_unconfigure(config):
     if not hasattr(config, 'workerinput'):
         stop_app(config)
         stop_mock()
+

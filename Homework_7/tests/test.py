@@ -7,91 +7,52 @@ from mock.flask_mock import SURNAME_DATA
 url = f'http://{settings.APP_HOST}:{settings.APP_PORT}'
 
 
-@pytest.mark.skip
-def test_add_get_user():
-    resp = requests.post(f'{url}/add_user', json={'name': 'Ilya'})#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-    user_id_from_add = resp.json()['user_id']
+class TestApp:
+    @pytest.mark.app
+    def test_add_get_user(self):
+        resp = requests.post(f'{url}/add_user', json={'name': 'Ilya'})
+        user_id_from_add = resp.json()['user_id']
 
-    resp = requests.get(f'{url}/get_user/Ilya')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    user_id_from_get = resp.json()['user_id']
+        resp = requests.get(f'{url}/get_user/Ilya')
+        user_id_from_get = resp.json()['user_id']
 
-    assert user_id_from_add == user_id_from_get
+        assert user_id_from_add == user_id_from_get
 
+    @pytest.mark.app
+    def test_add_existent_user(self):
+        requests.post(f'{url}/add_user', json={'name': 'Ilya1'})
+        resp = requests.post(f'{url}/add_user', json={'name': 'Ilya1'})
+        assert resp.status_code == 400
 
-@pytest.mark.skip
-def test_add_existent_user():
-    requests.post(f'{url}/add_user', json={'name': 'Ilya1'})#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    resp = requests.post(f'{url}/add_user', json={'name': 'Ilya1'})
-    assert resp.status_code == 400
+    @pytest.mark.app
+    def test_has_not_surname(self):
+        requests.post(f'{url}/add_user', json={'name': 'Sveta'})
 
+        resp = requests.get(f'{url}/get_user/Sveta')
+        assert resp.json()['surname'] == None
 
-@pytest.mark.skip
-def test_has_not_surname():
-    requests.post(f'{url}/add_user', json={'name': 'Sveta'})#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    resp = requests.get(f'{url}/get_user/Sveta')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    assert resp.json()['surname'] == None
-
-    print(resp.json())
-
-
-@pytest.mark.skip
-def test_by_socket():#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    requests.post(f'{url}/add_user', json={'name': 'Egor'})#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    import socket
-    import json
-
-    host = settings.APP_HOST
-    port = int(settings.APP_PORT)
-
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    client.settimeout(0.1)
-
-    client.connect((host, port))
-
-    params = '/get_user/Egor'
-    request = f'GET {params} HTTP/1.1\r\nHost:{host}\r\n\r\n'
-
-    client.send(request.encode())
-
-    total_data = []
-
-    while True:
-        data = client.recv(4096)
-        if data:
-            total_data.append(data.decode())
-        else:
-            client.close()
-            break
-
-    data = ''.join(total_data).splitlines()
-
-    print(data)
-
-    assert json.loads(data[-1])['age'] > 0
+        print(resp.json())
 
 
 class TestMock:
-    @pytest.mark.skip
+    @pytest.mark.get
     def test_has_surname(self):
         SURNAME_DATA['Olya'] = 'Zaitceva'
 
-        requests.post(f'{url}/add_user', json={'name': 'Olya'})#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        requests.post(f'{url}/add_user', json={'name': 'Olya'})
 
-        resp = requests.get(f'{url}/get_user/Olya')#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        resp = requests.get(f'{url}/get_user/Olya')
         assert resp.json()['surname'] == 'Zaitceva'
 
         print(resp.json())
 
-    @pytest.mark.skip
+    @pytest.mark.get
     def test_get_non_existent_user(self):
-        resp = requests.get(f'{url}/get_user/dnsfndksfnkjsdnfjkdsjkfnsd')  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        resp = requests.get(f'{url}/get_user/dnsfndksfnkjsdnfjkdsjkfnsd')
         assert resp.status_code == 404
 
     # ----------------------------------------My code-----------------------------------------------------------------
-
+    @pytest.mark.put
     def test_put_update(self):
         SURNAME_DATA['George'] = 'Talamanov'
         requests.post(f'{url}/add_user', json={'name': 'George'})
@@ -102,6 +63,7 @@ class TestMock:
         resp = requests.get(f'{url}/get_user/George')
         assert resp.json()['surname'] == 'Kalashnikov'
 
+    @pytest.mark.put
     def test_put_create(self):
         resp = requests.put(f'{url}/update_user/John', json={'surname': 'Talamanov'})
         assert resp.status_code == 201
@@ -109,6 +71,7 @@ class TestMock:
         resp = requests.get(f'{url}/get_user/John')
         assert resp.json()['surname'] == 'Talamanov'
 
+    @pytest.mark.delete
     def test_del_good(self):
         SURNAME_DATA['Alina'] = 'Novikova'
         requests.post(f'{url}/add_user', json={'name': 'Alina'})
@@ -118,12 +81,14 @@ class TestMock:
         resp = requests.get(f'{url}/get_user/Alina')
         assert resp.json()['surname'] == None
 
+    @pytest.mark.delete
     def test_del_no_surname(self):
         requests.post(f'{url}/add_user', json={'name': 'Anna'})
 
         resp = requests.delete(f'{url}/delete_surname/Anna')
         assert resp.status_code == 422
 
+    @pytest.mark.delete
     def test_del_bad(self):
         resp = requests.delete(f'{url}/delete_surname/Mike')
         assert resp.status_code == 404
