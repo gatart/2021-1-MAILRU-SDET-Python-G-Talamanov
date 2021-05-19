@@ -51,7 +51,7 @@ def del_user_surname(name):
         del SURNAME_DATA[name]
         return jsonify(f'{name} was successfully deleted'), 200
     else:
-        return jsonify(f'User {name} does not have surname'), 404
+        return jsonify(f'User {name} does not have surname'), 422
 
 
 @app.route('/put_surname/<name>', methods=['PUT'])

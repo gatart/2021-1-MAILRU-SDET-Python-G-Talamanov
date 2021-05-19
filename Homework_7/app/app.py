@@ -83,7 +83,7 @@ def update_user(name):
     return jsonify('Unknown Error'), 520
 
 
-@app.route('/update_user/<name>', methods=['PUT'])
+@app.route('/delete_surname/<name>', methods=['DELETE'])
 def delete_surname(name):
     user_id = app_data.get(name)  # Python 3.7.3
     if user_id:
@@ -93,12 +93,15 @@ def delete_surname(name):
         try:
             resp = requests.delete(f'http://{mock_host}:{mock_port}/del_surname/{name}')
             if resp.status_code == 200:
-                surname = resp.json()
+                return jsonify(f'{name} was successfully deleted'), 200
+            if resp.status_code == 422:
+                return jsonify(f'User {name} does not have surname'), 422
 
         except Exception as e:
-            print(f'Unable to get surname from external system:\n{e}')
 
-        return jsonify(), 200
+            return jsonify(f'Unable to delete user\'s surname from external system:\n{e}'), 500
+
+        return jsonify('Unknown Error'), 520
     else:
         return jsonify(f'User name {name} not found'), 404
 # ----------------------------------------------------------------------------------------

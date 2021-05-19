@@ -109,17 +109,21 @@ class TestMock:
         resp = requests.get(f'{url}/get_user/John')
         assert resp.json()['surname'] == 'Talamanov'
 
-    @pytest.mark.skip
-    def test_del_surname_good(self):
+    def test_del_good(self):
         SURNAME_DATA['Alina'] = 'Novikova'
         requests.post(f'{url}/add_user', json={'name': 'Alina'})
 
-        resp = requests.delete(f'{url}/del_surname/Alina')
+        resp = requests.delete(f'{url}/delete_surname/Alina')
         assert resp.status_code == 200
         resp = requests.get(f'{url}/get_user/Alina')
         assert resp.json()['surname'] == None
 
-    @pytest.mark.skip
-    def test_del_surname_bad(self):
-        resp = requests.delete(f'{url}/del_surname/Mike')
-        assert resp.status_code == 404 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Ne videt etot url
+    def test_del_no_surname(self):
+        requests.post(f'{url}/add_user', json={'name': 'Anna'})
+
+        resp = requests.delete(f'{url}/delete_surname/Anna')
+        assert resp.status_code == 422
+
+    def test_del_bad(self):
+        resp = requests.delete(f'{url}/delete_surname/Mike')
+        assert resp.status_code == 404
